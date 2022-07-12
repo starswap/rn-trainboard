@@ -8,6 +8,11 @@ import { RootStackParamList } from './src/routes';
 import DetailsScreen from './src/screens/details';
 import HomeScreen from './src/screens/home';
 import 'react-native-gesture-handler';
+import { config } from './src/config';
+
+// This ensures that a valid dotenv config is pulled before allowing the app to run,
+// helping to avoid unnoticed runtime crashes due to invalid config.
+config;
 
 const Stack = createStackNavigator<RootStackParamList>();
 

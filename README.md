@@ -16,11 +16,10 @@ This Trainboard App starter is a [React Native/Expo](https://expo.dev/) cross-pl
 6. Install the Expo Go app on your phone from the Play Store/App Store.
 7. Run the code!
      - Run in development mode with hot reloading with `npm start`
-     - To view the app on your own device:
-         - Navigate to the developer tools URL given in the console
-         - Change the connection mode to "Tunnel"
-         - Scan the QR code with the Expo Go app
-         - Once loaded, making code changes in VS Code should hot-reload in the app
+     - If you have changed environment variables or otherwise want to clear the Expo cache, run `npm run start:clean`
+     - To view the app on your own device, simply scan the QR code in the command line with the Expo Go app
+     - Once loaded, making code changes in VS Code should hot-reload in the app
+     - The npm commands are set up to run Expo in Tunnel mode. For more options, visit the localhost link given when you run the code in the browser and change the configuration in the browser-based developer tools.
 
 ### Running on a Simulator
 
