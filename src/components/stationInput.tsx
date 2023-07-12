@@ -1,30 +1,45 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Dispatch, SetStateAction } from 'react';
-import { TextInput } from 'react-native-paper';
+import {
+  AutocompleteDropdown,
+  TAutocompleteDropdownItem,
+} from 'react-native-autocomplete-dropdown';
+import { Station } from '../models/station';
+import {
+  stationToDropdownObject,
+  dropdownObjectToStation,
+} from '../mappers/station-to-dropdown-object';
 
 type StationInputProps = {
   label: string;
-  station: string;
-  setStation: Dispatch<SetStateAction<string>>;
+  setStation: Dispatch<SetStateAction<Station>>;
 };
 
-const styles = StyleSheet.create({
-  textbox: {
-    marginLeft: '5%',
-    marginRight: '5%',
-    width: '90%',
-  },
-});
-
-const StationInput: React.FC<StationInputProps> = (props) => (
-  <TextInput
-    style={styles.textbox}
-    label={props.label}
-    value={props.station}
-    onChangeText={(stn) => props.setStation(stn)}
-    mode="outlined"
-  ></TextInput>
-);
+const StationInput: React.FC<StationInputProps> = (props) => {
+  const allowedStations: Station[] = [
+    { stationName: 'Liphook', crs: 'LIP' },
+    { stationName: 'Waterloo', crs: 'WAT' },
+    { stationName: 'Watford Junction', crs: 'WFJ' },
+    { stationName: 'Cambridge', crs: 'CBG' },
+    { stationName: 'Edinburgh', crs: 'EDB' },
+  ];
+  return (
+    <View>
+      <AutocompleteDropdown
+        textInputProps={{ placeholder: props.label }}
+        emptyResultText="No station found"
+        suggestionsListMaxHeight={150}
+        clearOnFocus={true}
+        closeOnBlur={true}
+        closeOnSubmit={true}
+        onSelectItem={(selectedStation: TAutocompleteDropdownItem) =>
+          props.setStation(dropdownObjectToStation(selectedStation))
+        }
+        dataSet={allowedStations.map(stationToDropdownObject)}
+      />
+    </View>
+  );
+};
 
 export default StationInput;

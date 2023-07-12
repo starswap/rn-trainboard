@@ -10,6 +10,7 @@ import HomeScreen from './src/screens/home';
 import JourneyScreen from './src/screens/journey';
 import 'react-native-gesture-handler';
 import { config } from './src/config';
+import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 
 // This ensures that a valid dotenv config is pulled before allowing the app to run,
 // helping to avoid unnoticed runtime crashes due to invalid config.
@@ -24,20 +25,22 @@ enum Routes {
 }
 
 const App: React.FC = () => (
-  <PaperProvider theme={theme}>
-    <NavigationContainer theme={theme}>
-      <Stack.Navigator
-        initialRouteName={Routes.HOME}
-        screenOptions={{
-          header: (props) => <TopBar {...props} />,
-        }}
-      >
-        <Stack.Screen name={Routes.HOME} component={HomeScreen} />
-        <Stack.Screen name={Routes.DETAILS} component={DetailsScreen} />
-        <Stack.Screen name={Routes.JOURNEY} component={JourneyScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  </PaperProvider>
+  <AutocompleteDropdownContextProvider>
+    <PaperProvider theme={theme}>
+      <NavigationContainer theme={theme}>
+        <Stack.Navigator
+          initialRouteName={Routes.HOME}
+          screenOptions={{
+            header: (props) => <TopBar {...props} />,
+          }}
+        >
+          <Stack.Screen name={Routes.HOME} component={HomeScreen} />
+          <Stack.Screen name={Routes.DETAILS} component={DetailsScreen} />
+          <Stack.Screen name={Routes.JOURNEY} component={JourneyScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
+  </AutocompleteDropdownContextProvider>
 );
 
 export default App;
