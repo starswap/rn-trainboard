@@ -15,8 +15,8 @@ export function dropdownObjectToStation(
   dropdownObject: TAutocompleteDropdownItem,
 ): Station {
   if (dropdownObject && dropdownObject.title) {
-    const titleParse = /([a-zA-Z ]+) \(([A-Z]{3})\)/;
-    const match = dropdownObject.title.match(titleParse);
+    const stationNameAndCRSPattern = /([a-zA-Z ]+) \(([A-Z]{3})\)/;
+    const match = dropdownObject.title.match(stationNameAndCRSPattern);
     if (match) {
       return { stationName: match[1], crs: match[2]};
     }

@@ -9,6 +9,7 @@ import {
 import { Text, Button } from 'react-native-paper';
 import StationInput from '../components/stationInput';
 import { Station } from '../models/station';
+import { config } from '../config';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,12 +27,12 @@ const styles = StyleSheet.create({
 });
 
 const JourneyScreen: React.FC = () => {
-  const defaultStation: Station = { stationName: 'Waterloo', crs: 'WAT' };
+  const defaultStation = { stationName: 'Waterloo', crs: 'WAT' };
   const [departureStation, setDepartureStation] =
     React.useState<Station>(defaultStation);
   const [arrivalStation, setArrivalStation] =
     React.useState<Station>(defaultStation);
-  const url = `https://mobile-api-softwire2.lner.co.uk/v1/fares?originStation=${departureStation.crs}&destinationStation=${arrivalStation.crs}&noChanges=false&numberOfAdults=2&numberOfChildren=0&journeyType=single&outboundDateTime=2022-07-24T14%3A30%3A00.000%2B01%3A00&outboundIsArriveBy=false`;
+  const url = `${config.apiBaseUrl}v1/fares?originStation=${departureStation.crs}&destinationStation=${arrivalStation.crs}&noChanges=false&numberOfAdults=2&numberOfChildren=0&journeyType=single&outboundDateTime=2022-07-24T14%3A30%3A00.000%2B01%3A00&outboundIsArriveBy=false`;
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
