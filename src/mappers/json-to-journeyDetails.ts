@@ -3,8 +3,6 @@ import {
   Journey,
   ApiResponseString,
 } from '../models/journeyResponse';
-import { Status } from '../models/status';
-import { TrainOperator } from '../models/trainOperator';
 
 export function jsonToJourneyDetail(json: ApiResponseString): Journeys {
   return {

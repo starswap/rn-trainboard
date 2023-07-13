@@ -1,16 +1,7 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ImageSourcePropType,
-} from 'react-native';
-import { Status } from '../models/status';
-import { TrainOperator } from '../models/trainOperator';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { displayTime } from '../helpers/displayTime';
 import { Journey } from '../models/journeyResponse';
-import { statusToDisplayStatus } from '../mappers/status-to-display-status';
 import { StatusBox } from './statusBox';
 
 const styles = StyleSheet.create({
@@ -31,19 +22,16 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginRight: 5,
     marginLeft: 5,
-    //alignItems: 'flex-start',
   },
   medium_text: {
     fontSize: 18,
     marginRight: 5,
     marginLeft: 5,
-    //alignItems: 'flex-start',
   },
   small_text: {
     fontSize: 15,
     marginRight: 5,
     marginLeft: 5,
-    //alignItems: 'flex-start',
   },
   spacer: {
     flexGrow: 2,
@@ -78,14 +66,10 @@ export const JourneyDetails: React.FC<Journey> = (props) => {
         <Image
           style={{ width: 80, height: '100%' }}
           resizeMode="contain"
-          source={
-            require('../../assets/train_operators/AW.png') as ImageSourcePropType
-          }
-          //require(`../../assets/train_operators/${props.primaryTrainOperator.code}.png`) as ImageSourcePropType
+          source={{
+            uri: `https://hamishstarling.me/train_companies/${props.primaryTrainOperator.code}.png`,
+          }}
         ></Image>
-        {/* <Text style={styles.medium_text}>
-          {props.primaryTrainOperator.name}
-        </Text> */}
       </View>
     </View>
   );

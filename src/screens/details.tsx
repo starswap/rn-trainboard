@@ -37,7 +37,7 @@ const getJourneys = async (
   }&destinationStation=${
     arrivalStation.crs
   }&noChanges=false&numberOfAdults=1&numberOfChildren=0&journeyType=single&outboundDateTime=${encodeURIComponent(
-    date.toISOString().replace('Z', '+00:00'), //change number of adults
+    date.toISOString().replace('Z', '+00:00'), //default to 1 adult for now
   )}&outboundIsArriveBy=false`;
 
   try {
@@ -141,7 +141,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {departureStation.stationName} to {arrivalStation.stationName}
+        {departureStation.name} to {arrivalStation.name}
       </Text>
       {getJourneyDisplay(journeyResponse)}
     </View>
