@@ -1,4 +1,5 @@
 import { Status, DisplayStatus } from '../models/status';
+import { displayTime } from '../helpers/displayTime';
 
 export function statusToDisplayStatus(
   status: Status,
@@ -9,10 +10,7 @@ export function statusToDisplayStatus(
       return { message: 'On Time', color: '#33DA00' };
     case 'delayed':
       return {
-        message: `Delayed: ${realTime.toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        })}`,
+        message: `Delayed: ${displayTime(realTime)}`,
         color: '#FA7D00',
       };
     case 'cancelled':

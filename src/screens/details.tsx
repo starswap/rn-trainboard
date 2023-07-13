@@ -2,17 +2,16 @@ import React, { useEffect } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { Text } from 'react-native-paper';
 import { ScreenNavigationProps } from '../routes';
-import {
-  JourneyDetails,
-  JourneyDetailsProps,
-} from '../components/journeyDetails';
+import { JourneyDetails } from '../components/journeyDetails';
 import { config } from '../config';
 import {
+  Journeys,
   JourneyResponse,
-  JourneyResponseState,
+  ApiResponseString,
   RequestState,
 } from '../models/journeyResponse';
 import { Station } from '../models/station';
+import { jsonToJourneyDetail } from '../mappers/json-to-journeyDetails';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 24,
     marginBottom: 24,
-    fontSize: 20,
+    fontSize: 25,
   },
 });
 
@@ -32,13 +31,13 @@ const getJourneys = async (
   departureStation: Station,
   arrivalStation: Station,
   date: Date,
-): Promise<JourneyResponseState> => {
+): Promise<JourneyResponse> => {
   const url = `${config.apiBaseUrl}v1/fares?originStation=${
     departureStation.crs
   }&destinationStation=${
     arrivalStation.crs
-  }&noChanges=false&numberOfAdults=2&numberOfChildren=0&journeyType=single&outboundDateTime=${encodeURIComponent(
-    date.toISOString().replace('Z', '+00:00'),
+  }&noChanges=false&numberOfAdults=1&numberOfChildren=0&journeyType=single&outboundDateTime=${encodeURIComponent(
+    date.toISOString().replace('Z', '+00:00'), //change number of adults
   )}&outboundIsArriveBy=false`;
 
   try {
@@ -49,21 +48,37 @@ const getJourneys = async (
       },
     });
     if (response.status === 400) {
-      return RequestState.InvalidJourney;
+      return {
+        requestState: RequestState.InvalidJourney,
+        journeys: { outboundJourneys: [] },
+      };
     } else if (response.status === 503) {
-      return RequestState.ServerUnavailable;
+      return {
+        requestState: RequestState.ServerUnavailable,
+        journeys: { outboundJourneys: [] },
+      };
     } else if (response.status === 200) {
-      const apiResponse = (await response.json()) as JourneyResponse;
+      const apiResponseString = (await response.json()) as ApiResponseString;
+      const apiResponse: Journeys = jsonToJourneyDetail(apiResponseString);
       if (apiResponse.outboundJourneys.length === 0) {
-        return RequestState.NoJourneysReturned;
+        return {
+          requestState: RequestState.NoJourneysReturned,
+          journeys: { outboundJourneys: [] },
+        };
       } else {
-        return apiResponse;
+        return { requestState: RequestState.Success, journeys: apiResponse };
       }
     } else {
-      return RequestState.UnknownError;
+      return {
+        requestState: RequestState.UnknownError,
+        journeys: { outboundJourneys: [] },
+      };
     }
   } catch (error) {
-    return RequestState.NetworkError;
+    return {
+      requestState: RequestState.NetworkError,
+      journeys: { outboundJourneys: [] },
+    };
   }
 };
 
@@ -75,8 +90,8 @@ const getCurrentDate = () => {
 };
 
 // Allows us to switch on the result of the Journey Response
-const getJourneyDisplay = (journeyResponse: JourneyResponseState) => {
-  switch (journeyResponse) {
+const getJourneyDisplay = (journeyResponse: JourneyResponse) => {
+  switch (journeyResponse.requestState) {
     case RequestState.Loading:
       return <Text>Loading</Text>;
     case RequestState.InvalidJourney:
@@ -89,26 +104,26 @@ const getJourneyDisplay = (journeyResponse: JourneyResponseState) => {
       return <Text>Network Error</Text>;
     case RequestState.UnknownError:
       return <Text>Unknown Error (HTTP code)</Text>;
-    default:
+    case RequestState.Success:
       return (
         <FlatList
-          data={[
-            { id: 1, title: 'first item' },
-            { id: 2, title: 'second item' },
-          ]}
+          data={journeyResponse.journeys.outboundJourneys}
           renderItem={({ item }) => {
-            return <JourneyDetails></JourneyDetails>;
+            return <JourneyDetails {...item}></JourneyDetails>;
           }}
         />
       );
   }
-}
+};
 
 type DetailsScreenProps = ScreenNavigationProps<'Details'>;
 
 const DetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
-  const [journeyResponse, setJourneyResponse] =
-    React.useState<JourneyResponseState>(RequestState.Loading);
+  const departureStation = route.params.departureStation;
+  const arrivalStation = route.params.arrivalStation;
+  const [journeyResponse, setJourneyResponse] = React.useState<JourneyResponse>(
+    { requestState: RequestState.Loading, journeys: { outboundJourneys: [] } },
+  );
   const [cachedDate, setCachedDate] = React.useState<Date>(getCurrentDate());
 
   if (getCurrentDate().getMinutes() - cachedDate.getMinutes() > 5) {
@@ -118,19 +133,14 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   useEffect(() => {
     void (async () =>
       setJourneyResponse(
-        await getJourneys(
-          route.params.departureStation,
-          route.params.arrivalStation,
-          cachedDate,
-        ),
+        await getJourneys(departureStation, arrivalStation, cachedDate),
       ))();
-  }, [route.params.departureStation, route.params.arrivalStation, cachedDate]);
+  }, [departureStation, arrivalStation, cachedDate]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {route.params.departureStation.stationName} to{' '}
-        {route.params.arrivalStation.stationName}
+        {departureStation.stationName} to {arrivalStation.stationName}
       </Text>
       {getJourneyDisplay(journeyResponse)}
     </View>
