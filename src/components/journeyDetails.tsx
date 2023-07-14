@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { displayTime } from '../helpers/displayTime';
 import { Journey } from '../models/journeyResponse';
 import { StatusBox } from './statusBox';
+import { config } from '../config';
 
 const styles = StyleSheet.create({
   outer_container: {
@@ -67,7 +68,7 @@ export const JourneyDetails: React.FC<Journey> = (props) => {
           style={{ width: 80, height: '100%' }}
           resizeMode="contain"
           source={{
-            uri: `https://hamishstarling.me/train_companies/${props.primaryTrainOperator.code}.png`,
+            uri: `${config.assetUrl}${props.primaryTrainOperator.code}.png`,
           }}
         ></Image>
       </View>

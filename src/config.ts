@@ -6,8 +6,10 @@ const throwConfigError = (key: string) => {
 // decompiled to access it. It's fine for this training exercise though.
 const apiKey = process.env.API_KEY ?? throwConfigError('API_KEY');
 const apiBaseUrl = process.env.API_BASE_URL ?? throwConfigError('API_BASE_URL');
+const assetUrl = process.env.ASSET_URL ?? throwConfigError('ASSET_URL');
 
 export const config = {
   apiKey,
   apiBaseUrl,
+  assetUrl
 };
