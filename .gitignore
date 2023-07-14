@@ -14,3 +14,6 @@ web-build/
 
 # macOS
 .DS_Store
+
+# copyright
+assets/train_operators

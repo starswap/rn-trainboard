@@ -1,4 +1,4 @@
 export type Station = {
-  stationName: string;
+  name: string;
   crs: string;
 };

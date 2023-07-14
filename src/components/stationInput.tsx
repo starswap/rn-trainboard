@@ -12,18 +12,13 @@ import {
 } from '../mappers/station-to-dropdown-object';
 
 type StationInputProps = {
+  allowedStations: Station[];
   label: string;
   setStation: Dispatch<SetStateAction<Station>>;
 };
 
 const StationInput: React.FC<StationInputProps> = (props) => {
-  const allowedStations = [
-    { stationName: 'Liphook', crs: 'LIP' },
-    { stationName: 'Waterloo', crs: 'WAT' },
-    { stationName: 'Watford Junction', crs: 'WFJ' },
-    { stationName: 'Cambridge', crs: 'CBG' },
-    { stationName: 'Edinburgh', crs: 'EDB' },
-  ];
+  const allowedStations = props.allowedStations;
   return (
     <View>
       <AutocompleteDropdown

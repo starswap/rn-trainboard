@@ -1,14 +1,9 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  Linking,
-} from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import StationInput from '../components/stationInput';
 import { Station } from '../models/station';
+import { ScreenNavigationProps } from '../routes';
 import { config } from '../config';
 
 const styles = StyleSheet.create({
@@ -16,7 +11,7 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
   },
-  text: {
+  title: {
     marginTop: 24,
     marginBottom: 24,
     fontSize: 20,
@@ -26,13 +21,41 @@ const styles = StyleSheet.create({
   },
 });
 
-const JourneyScreen: React.FC = () => {
-  const defaultStation = { stationName: 'Waterloo', crs: 'WAT' };
+async function getAllStations(): Promise<Station[]> {
+  try {
+    const response = await fetch(`${config.apiBaseUrl}v1/stations`, {
+      method: 'GET',
+      headers: {
+        'x-api-key': config.apiKey,
+      },
+    });
+    if (response.status === 200) {
+      return ((await response.json()) as { stations: Station[] }).stations
+        .filter((station) => station.crs !== null)
+        .sort((stationA, stationB) =>
+          stationA.name.localeCompare(stationB.name),
+        );
+    } else {
+      return [];
+    }
+  } catch {
+    return [];
+  }
+}
+
+type JourneyScreenProps = ScreenNavigationProps<'Journey'>;
+
+const JourneyScreen: React.FC<JourneyScreenProps> = ({ navigation }) => {
+  const [allowedStations, setAllowedStations] = React.useState<Station[]>([]);
+  React.useEffect(() => {
+    void (async () => setAllowedStations(await getAllStations()))();
+  }, []);
+
+  const defaultStation = { name: 'Waterloo', crs: 'WAT' };
   const [departureStation, setDepartureStation] =
     React.useState<Station>(defaultStation);
   const [arrivalStation, setArrivalStation] =
     React.useState<Station>(defaultStation);
-  const url = `${config.apiBaseUrl}v1/fares?originStation=${departureStation.crs}&destinationStation=${arrivalStation.crs}&noChanges=false&numberOfAdults=2&numberOfChildren=0&journeyType=single&outboundDateTime=2022-07-24T14%3A30%3A00.000%2B01%3A00&outboundIsArriveBy=false`;
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -40,13 +63,15 @@ const JourneyScreen: React.FC = () => {
       enabled={false}
     >
       <View style={styles.container}>
-        <Text style={styles.text}>Welcome to the journey planner</Text>
+        <Text style={styles.title}>Welcome to the journey planner</Text>
         <StationInput
+          allowedStations={allowedStations}
           label="Choose departure station"
           setStation={setDepartureStation}
         />
         <View style={styles.spacer} />
         <StationInput
+          allowedStations={allowedStations}
           label="Choose arrival station"
           setStation={setArrivalStation}
         />
@@ -54,11 +79,12 @@ const JourneyScreen: React.FC = () => {
         <Button
           mode="contained"
           disabled={!(departureStation.crs && arrivalStation.crs)}
-          onPress={() => {
-            void (async function () {
-              await Linking.openURL(url);
-            })();
-          }}
+          onPress={() =>
+            navigation.navigate('Details', {
+              departureStation: departureStation,
+              arrivalStation: arrivalStation,
+            })
+          }
         >
           Find routes
         </Button>
