@@ -7,7 +7,7 @@ export function statusToDisplayStatus(
 ): DisplayStatus {
   switch (status) {
     case 'normal':
-      return { message: 'On Time', color: '#33DA00' };
+      return { message: 'On Time', color: '#0DA813' };
     case 'delayed':
       return {
         message: `Delayed: ${displayTime(realTime)}`,
