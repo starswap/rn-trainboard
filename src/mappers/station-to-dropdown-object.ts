@@ -18,7 +18,7 @@ export function dropdownObjectToStation(
     const stationNameAndCRSPattern = /([a-zA-Z ]+) \(([A-Z]{3})\)/;
     const match = dropdownObject.title.match(stationNameAndCRSPattern);
     if (match) {
-      return { stationName: match[1], crs: match[2]};
+      return { stationName: match[1], crs: match[2] };
     }
   }
   return { stationName: '', crs: '' };

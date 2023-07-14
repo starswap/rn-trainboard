@@ -9,5 +9,5 @@ const apiBaseUrl = process.env.API_BASE_URL ?? throwConfigError('API_BASE_URL');
 
 export const config = {
   apiKey,
-  apiBaseUrl
+  apiBaseUrl,
 };
