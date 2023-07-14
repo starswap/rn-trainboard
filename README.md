@@ -1,4 +1,32 @@
-# Trainboard - Mobile App Starter
+# Trainboard - Mobile App
+
+Trainboard App for Softwire Training:
+### Selling points of our version of the TrainBoard App:
+- Searchable dropdown list / typeahead for station selection
+- Error handling without displaying raw API errors to the user
+- Live updating every 5 minutes on the journey details screen
+- Logos of the train companies
+- Live status updates for the trains (On Time etc)
+- Cross Platform (iOS and Android)
+
+### Further Features to add:
+- Support for return journeys
+- Entering railcards and the people that want to travel on the home screen
+- Finding the nearest station to the user by GPS using Expo Location
+- Caching the list of stations so that we don't have to download them eveyr time
+- Fix the warning about the Date not being serializable
+- State persistence so that when the user goes off the app and comes back on then the app state will be maintained
+
+<br />
+
+<img src="readme-assets/abbeyWood.jpeg" width="20%" />
+<img src="readme-assets/journeyPlanner.jpeg" width="20%" />
+<img src="readme-assets/southActon.jpeg" width="20%" />
+<img src="readme-assets/york.jpeg" width="20%" />
+
+<br />
+
+# Starter Instructions:
 
 ## Overview
 
