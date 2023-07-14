@@ -124,7 +124,9 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   const [journeyResponse, setJourneyResponse] = React.useState<JourneyResponse>(
     { requestState: RequestState.Loading, journeys: { outboundJourneys: [] } },
   );
-  const [cachedDate, setCachedDate] = React.useState<Date>(getTwoMinutesFromNow());
+  const [cachedDate, setCachedDate] = React.useState<Date>(
+    getTwoMinutesFromNow(),
+  );
 
   if (getTwoMinutesFromNow().getMinutes() - cachedDate.getMinutes() > 5) {
     setCachedDate(getTwoMinutesFromNow());

@@ -11,5 +11,5 @@ const assetUrl = process.env.ASSET_URL ?? throwConfigError('ASSET_URL');
 export const config = {
   apiKey,
   apiBaseUrl,
-  assetUrl
+  assetUrl,
 };
