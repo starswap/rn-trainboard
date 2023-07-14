@@ -82,14 +82,13 @@ const getJourneys = async (
   }
 };
 
-// Returns a time just after the current time, so that the LNER API has a time in the future to consider
-const getCurrentDate = () => {
+// The LNER API needs a time in the future
+const getTwoMinutesFromNow = () => {
   const date = new Date();
   date.setMinutes(date.getMinutes() + 2); // Default to any time after now
   return date;
 };
 
-// Allows us to switch on the result of the Journey Response
 const getJourneyDisplay = (journeyResponse: JourneyResponse) => {
   switch (journeyResponse.requestState) {
     case RequestState.Loading:
@@ -125,10 +124,10 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
   const [journeyResponse, setJourneyResponse] = React.useState<JourneyResponse>(
     { requestState: RequestState.Loading, journeys: { outboundJourneys: [] } },
   );
-  const [cachedDate, setCachedDate] = React.useState<Date>(getCurrentDate());
+  const [cachedDate, setCachedDate] = React.useState<Date>(getTwoMinutesFromNow());
 
-  if (getCurrentDate().getMinutes() - cachedDate.getMinutes() > 5) {
-    setCachedDate(getCurrentDate());
+  if (getTwoMinutesFromNow().getMinutes() - cachedDate.getMinutes() > 5) {
+    setCachedDate(getTwoMinutesFromNow());
   }
 
   useEffect(() => {

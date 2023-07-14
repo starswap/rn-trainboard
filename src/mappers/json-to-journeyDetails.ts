@@ -1,14 +1,8 @@
-import {
-  Journeys,
-  Journey,
-  ApiResponseString,
-} from '../models/journeyResponse';
+import { Journeys, ApiResponseString } from '../models/journeyResponse';
 
 export function jsonToJourneyDetail(json: ApiResponseString): Journeys {
   return {
-    outboundJourneys: json.outboundJourneys.map(function (
-      outboundJourney,
-    ): Journey {
+    outboundJourneys: json.outboundJourneys.map((outboundJourney) => {
       return {
         departureTime: new Date(outboundJourney.departureTime),
         arrivalTime: new Date(outboundJourney.arrivalTime),

@@ -7,6 +7,9 @@ export type ScreenNavigationProps<T extends keyof RootStackParamList> = {
   route: RouteProp<RootStackParamList, T>;
 };
 
+// Parameters that each screen receives through the route object.
+// We pass a Route into details but we don't pass anything into Home or Journey,
+// for example
 export type RootStackParamList = {
   Home: undefined;
   Details: Route;

@@ -18,13 +18,6 @@ type StationInputProps = {
 };
 
 const StationInput: React.FC<StationInputProps> = (props) => {
-  // const allowedStations = [
-  //   { stationName: 'Liphook', crs: 'LIP' },
-  //   { stationName: 'Waterloo', crs: 'WAT' },
-  //   { stationName: 'Watford Junction', crs: 'WFJ' },
-  //   { stationName: 'Cambridge', crs: 'CBG' },
-  //   { stationName: 'Edinburgh', crs: 'EDB' },
-  // ];
   const allowedStations = props.allowedStations;
   return (
     <View>
