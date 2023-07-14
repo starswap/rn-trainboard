@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   outer_container: {
     marginTop: 10,
     marginBottom: 10,
+    width: '100%',
   },
   inner_container: {
     flex: 1,
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
     marginBottom: 3,
     alignItems: 'flex-end',
+    width: '100%',
   },
   large_text: {
     fontSize: 22,
@@ -74,9 +76,10 @@ export const JourneyDetails: React.FC<Journey> = (props) => {
         />
         <View style={styles.spacer} />
         <Image
-          style={{ height: 50, resizeMode: 'contain'}}
+          style={{ width: 80, height: '100%' }}
+          resizeMode="contain"
           source={
-            require('../../assets/train_operators/GW.png') as ImageSourcePropType
+            require('../../assets/train_operators/AW.png') as ImageSourcePropType
           }
           //require(`../../assets/train_operators/${props.primaryTrainOperator.code}.png`) as ImageSourcePropType
         ></Image>

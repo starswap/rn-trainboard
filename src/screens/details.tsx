@@ -107,6 +107,7 @@ const getJourneyDisplay = (journeyResponse: JourneyResponse) => {
     case RequestState.Success:
       return (
         <FlatList
+          style={{ width: '90%' }}
           data={journeyResponse.journeys.outboundJourneys}
           renderItem={({ item }) => {
             return <JourneyDetails {...item}></JourneyDetails>;
