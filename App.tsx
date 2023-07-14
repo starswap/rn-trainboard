@@ -8,6 +8,7 @@ import { RootStackParamList } from './src/routes';
 import DetailsScreen from './src/screens/details';
 import HomeScreen from './src/screens/home';
 import JourneyScreen from './src/screens/journey';
+import LegsScreen from './src/screens/legs';
 import 'react-native-gesture-handler';
 import { config } from './src/config';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
@@ -22,6 +23,7 @@ enum Routes {
   HOME = 'Home',
   DETAILS = 'Details',
   JOURNEY = 'Journey',
+  LEGS = 'Legs',
 }
 
 const App: React.FC = () => (
@@ -37,6 +39,7 @@ const App: React.FC = () => (
           <Stack.Screen name={Routes.HOME} component={HomeScreen} />
           <Stack.Screen name={Routes.DETAILS} component={DetailsScreen} />
           <Stack.Screen name={Routes.JOURNEY} component={JourneyScreen} />
+          <Stack.Screen name={Routes.LEGS} component={LegsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

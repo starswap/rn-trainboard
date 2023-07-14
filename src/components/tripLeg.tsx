@@ -1,22 +1,28 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { displayTime } from '../helpers/displayTime';
-import { Journey } from '../models/journey';
+import { Journey, LegDetails, TravelMode } from '../models/journey';
 import { StatusBox } from './statusBox';
 import { config } from '../config';
+import { Station } from '../models/station';
+import { TrainOperator } from '../models/trainOperator';
+import { Status } from '../models/status';
 
 const styles = StyleSheet.create({
   outer_container: {
     marginTop: 10,
     marginBottom: 10,
     width: '100%',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
   },
   inner_container: {
     flex: 1,
     flexDirection: 'row',
     marginTop: 3,
     marginBottom: 3,
-    alignItems: 'flex-end',
+    // alignItems: 'cent/',
     width: '100%',
   },
   large_text: {
@@ -39,36 +45,37 @@ const styles = StyleSheet.create({
   },
 });
 
-export const JourneyDetails: React.FC<Journey> = (props) => {
+type TripLegProps = {
+  departureTime: Date;
+  departureRealTime: Date;
+  arrivalTime: Date; // maybe
+  departureStation: Station;
+  trainOperator: TrainOperator;
+  status: Status;
+  mode: TravelMode;
+};
+
+export const TripLeg: React.FC<TripLegProps> = (props) => {
   return (
     <View style={styles.outer_container}>
       <View style={styles.inner_container}>
         <Text style={styles.large_text}>
           {displayTime(props.departureTime)}
         </Text>
-        <Text style={styles.small_text}>
-          arrives {displayTime(props.arrivalTime)}
-        </Text>
-        <View style={styles.spacer} />
-        <Text style={styles.large_text}>
-          £
-          {(
-            Math.min(...props.tickets.map((ticket) => ticket.priceInPennies)) /
-            100
-          ).toFixed(2)}
-        </Text>
+        <Text style={styles.large_text}>{props.departureStation.name}</Text>
+
       </View>
       <View style={styles.inner_container}>
         <StatusBox
           status={props.status}
           departureRealTime={props.departureRealTime}
         />
-        <View style={styles.spacer} />
+        <View style={styles.spacer}></View>
         <Image
           style={{ width: 80, height: '100%' }}
           resizeMode="contain"
           source={{
-            uri: `${config.assetUrl}${props.primaryTrainOperator.code}.png`,
+            uri: `${config.assetUrl}${props.trainOperator.code}.png`,
           }}
         ></Image>
       </View>

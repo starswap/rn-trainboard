@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, TouchableHighlight } from 'react-native';
 import { Text } from 'react-native-paper';
 import { ScreenNavigationProps } from '../routes';
 import { JourneyDetails } from '../components/journeyDetails';
 import { config } from '../config';
-import {
-  Journeys,
-  JourneyResponse,
-  ApiResponseString,
-  RequestState,
-} from '../models/journeyResponse';
+import { Journeys, JourneyResponse, RequestState } from '../models/journey';
+import { ApiResponseString } from '../models/apiSchema';
 import { Station } from '../models/station';
 import { jsonToJourneyDetail } from '../mappers/json-to-journeyDetails';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../routes';
 
 const styles = StyleSheet.create({
   container: {
@@ -75,6 +73,7 @@ const getJourneys = async (
       };
     }
   } catch (error) {
+    console.log(error);
     return {
       requestState: RequestState.NetworkError,
       journeys: { outboundJourneys: [] },
@@ -89,7 +88,11 @@ const getTwoMinutesFromNow = () => {
   return date;
 };
 
-const getJourneyDisplay = (journeyResponse: JourneyResponse) => {
+// Allows us to switch on the result of the Journey Response
+const getJourneyDisplay = (
+  journeyResponse: JourneyResponse,
+  navigation: StackNavigationProp<RootStackParamList>,
+) => {
   switch (journeyResponse.requestState) {
     case RequestState.Loading:
       return <Text>Loading</Text>;
@@ -109,7 +112,14 @@ const getJourneyDisplay = (journeyResponse: JourneyResponse) => {
           style={{ width: '90%' }}
           data={journeyResponse.journeys.outboundJourneys}
           renderItem={({ item }) => {
-            return <JourneyDetails {...item}></JourneyDetails>;
+            return (
+              <TouchableHighlight
+                onPress={() => navigation.navigate('Legs', { journey: item })}
+                underlayColor={'#A6BAF7'}
+              >
+                <JourneyDetails {...item}></JourneyDetails>
+              </TouchableHighlight>
+            );
           }}
         />
       );
@@ -118,7 +128,7 @@ const getJourneyDisplay = (journeyResponse: JourneyResponse) => {
 
 type DetailsScreenProps = ScreenNavigationProps<'Details'>;
 
-const DetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
+const DetailsScreen: React.FC<DetailsScreenProps> = ({ navigation, route }) => {
   const departureStation = route.params.departureStation;
   const arrivalStation = route.params.arrivalStation;
   const [journeyResponse, setJourneyResponse] = React.useState<JourneyResponse>(
@@ -144,7 +154,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
       <Text style={styles.title}>
         {departureStation.name} to {arrivalStation.name}
       </Text>
-      {getJourneyDisplay(journeyResponse)}
+      {getJourneyDisplay(journeyResponse, navigation)}
     </View>
   );
 };
